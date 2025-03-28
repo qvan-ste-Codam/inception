@@ -1,0 +1,30 @@
+services:
+  nginx:
+    build: requirements/nginx
+    # image: nginx
+    container_name: server
+    restart: unless-stopped
+    ports:
+      - "1024:80"
+    volumes:
+      - wordpress:/var/www/html
+      - ./requirements/nginx/conf:/etc/nginx/conf.d
+    networks:
+      - lemp-network
+
+  wordpress:
+    build: requirements/wordpress
+    # image: wordpress
+    container_name: wp
+    restart: unless-stopped
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - lemp-network
+
+volumes:
+  wordpress:
+
+networks:
+  lemp-network:
+    driver: bridge
