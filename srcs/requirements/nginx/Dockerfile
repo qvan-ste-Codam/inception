@@ -15,4 +15,6 @@ RUN apk add --no-cache \
     && mv /tmp/nginx_signing.rsa.pub /etc/apk/keys/ \
     && apk add --no-cache nginx-module-image-filter@nginx nginx-module-njs@nginx
 
+COPY ./conf/nginx.conf /etc/nginx/conf.d/default.conf
+
 CMD ["nginx", "-g", "daemon off;"]

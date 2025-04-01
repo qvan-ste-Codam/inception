@@ -1,15 +1,19 @@
 FROM alpine:3.20
 
+ARG CONTAINER_NAME
 
 RUN apk add --no-cache \
     php83 \
-    php82-fpm \
-    # wget 
+    php83-fpm \
+    php83-mysqli \
+    wget 
 
-    # RUN wget https://wordpress.org/latest.tar.gz &&\
-    #     mkdir -p /var/www/html/ &&\
-    #     tar -xf latest.tar.gz && \
-    #     mv wordpress/* /var/www/html/ && \
-    #     rm -rf latest.tar.gz wordpress
+RUN wget https://wordpress.org/latest.tar.gz &&\
+    mkdir -p /var/www/html/ &&\
+    tar -xf latest.tar.gz && \
+    mv wordpress/* /var/www/html/ && \
+    rm -rf latest.tar.gz wordpress
 
-    # CMD ["/usr/sbin/php-fpm84", "-F"]
+RUN echo "listen = ${CONTAINER_NAME}:9000" >> /etc/php83/php-fpm.d/www.conf
+
+CMD ["/usr/sbin/php-fpm83", "-F"]

@@ -1,29 +1,51 @@
 services:
   nginx:
     build: requirements/nginx
-    # image: nginx
-    container_name: server
+    image: nginx
+    container_name: ${NGINX_CONTAINER_NAME:-nginx}
     restart: unless-stopped
     ports:
       - "1024:80"
     volumes:
       - wordpress:/var/www/html
-      - ./requirements/nginx/conf:/etc/nginx/conf.d
     networks:
       - lemp-network
+    depends_on:
+      - wordpress
 
   wordpress:
-    build: requirements/wordpress
-    # image: wordpress
-    container_name: wp
+    build:
+      context: ./requirements/wordpress
+      args:
+        - CONTAINER_NAME=${WP_CONTAINER_NAME:-wp}
+    image: wordpress
+    container_name: ${WP_CONTAINER_NAME:-wp}
     restart: unless-stopped
     volumes:
       - wordpress:/var/www/html
     networks:
       - lemp-network
+    depends_on:
+      - mariadb
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-wordpress}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+    image: mariadb
+    container_name: ${MARIADB_CONTAINER_NAME:-mariadb}
+    restart: unless-stopped
+
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - lemp-network
 
 volumes:
   wordpress:
+  db:
 
 networks:
   lemp-network:
