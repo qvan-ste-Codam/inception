@@ -9,6 +9,8 @@ build:
 
 clean:
 	docker compose -f $(DOCKER_COMPOSE_FILE) down --remove-orphans
+	docker system prune -a -f
+	docker volume prune -a -f
 
 re: clean build all
 
