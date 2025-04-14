@@ -32,6 +32,14 @@ services:
       - WORDPRESS_DB_USER=${DB_USER}
       - WORDPRESS_DB_PASSWORD=${DB_PASSWORD}
       - WORDPRESS_DB_HOST=db
+      - AUTH_KEY=${AUTH_KEY}
+      - SECURE_AUTH_KEY=${SECURE_AUTH_KEY}
+      - LOGGED_IN_KEY=${LOGGED_IN_KEY}
+      - NONCE_KEY=${NONCE_KEY}
+      - AUTH_SALT=${AUTH_SALT}
+      - SECURE_AUTH_SALT=${SECURE_AUTH_SALT}
+      - LOGGED_IN_SALT=${LOGGED_IN_SALT}
+      - NONCE_SALT=${NONCE_SALT}
 
   mariadb:
     build:
@@ -55,8 +63,15 @@ services:
 
 volumes:
   wordpress:
+    driver_opts:
+      type: none
+      device: ${HOME}/data/html
+      o: bind
   mariadb:
-
+    driver_opts:
+      type: none
+      device: ${HOME}/data/db
+      o: bind
 
 networks:
   lemp-network:

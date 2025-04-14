@@ -48,14 +48,8 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         bin2hex(random_bytes(32)));
-define( 'SECURE_AUTH_KEY',  bin2hex(random_bytes(32)));
-define( 'LOGGED_IN_KEY',    bin2hex(random_bytes(32)));
-define( 'NONCE_KEY',        bin2hex(random_bytes(32)));
-define( 'AUTH_SALT',        bin2hex(random_bytes(32)));
-define( 'SECURE_AUTH_SALT', bin2hex(random_bytes(32)));
-define( 'LOGGED_IN_SALT',   bin2hex(random_bytes(32)));
-define( 'NONCE_SALT',       bin2hex(random_bytes(32)));
+
+// AUTH KEY PLACEHOLDER
 
 /**#@-*/
 
@@ -88,7 +82,6 @@ $table_prefix = 'wp_';
 define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
-
 
 
 /* That's all, stop editing! Happy publishing. */
