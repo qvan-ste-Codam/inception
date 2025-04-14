@@ -59,7 +59,6 @@ volumes:
   wordpress:
   mariadb:
 
-
 networks:
   lemp-network:
     driver: bridge
