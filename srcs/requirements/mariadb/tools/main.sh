@@ -9,7 +9,7 @@ if [ ! -f "$DIR_DATA/ibdata1" ]; then
     wait $!
     
     mariadbd --datadir=$DIR_DATA  &
-    MARIADB_PID=$!
+    PID=$!
     
     until mariadb-admin ping 
     do
@@ -17,14 +17,15 @@ if [ ! -f "$DIR_DATA/ibdata1" ]; then
     done
     
     mariadb <<-EOF
-        CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-        CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-        GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
-        FLUSH PRIVILEGES;
+        CREATE DATABASE IF NOT EXISTS ${DB_NAME};
+        CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+        GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
+        DELETE FROM mysql.user WHERE User='';
+        FLUSH PRIVILEGES; 
 EOF
-    
-    kill $MARIADB_PID
-    wait $MARIADB_PID || true
+
+    kill $PID
+    wait $PID || true
 fi
 
 exec /usr/bin/mariadbd-safe --datadir=$DIR_DATA

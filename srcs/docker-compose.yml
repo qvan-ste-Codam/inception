@@ -38,11 +38,6 @@ services:
   mariadb:
     build:
       context: ./requirements/mariadb
-      args:
-        - DB_FOLDER=/var/lib/mariadb
-        - DB_NAME=${DB_NAME}
-        - DB_USER=${DB_USER}
-        - DB_PASSWORD=${DB_PASSWORD}
     image: mariadb
     container_name: db
     restart: unless-stopped
@@ -55,10 +50,10 @@ services:
     expose:
       - 3306
     environment:
-      - DIR_DATA=/var/lib/mysql
-      - MYSQL_DATABASE=wordpress
-      - MYSQL_USER=wpuser
-      - MYSQL_PASSWORD=secure_password
+      - DIR_DATA=/var/lib/mariadb
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
 
 volumes:
   # wordpress:
