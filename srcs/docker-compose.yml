@@ -1,51 +1,69 @@
 services:
-  nginx:
-    build: requirements/nginx
-    image: nginx
-    container_name: ${NGINX_CONTAINER_NAME:-nginx}
-    restart: unless-stopped
-    ports:
-      - "1024:80"
-    volumes:
-      - wordpress:/var/www/html
-    networks:
-      - lemp-network
-    depends_on:
-      - wordpress
+  # nginx:
+  #   depends_on:
+  #     - wordpress
+  #   build: requirements/nginx
+  #   image: nginx
+  #   container_name: nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "1024:80"
+  #   volumes:
+  #     - wordpress:/var/www/html
+  #   networks:
+  #     - lemp-network
 
-  wordpress:
-    build:
-      context: ./requirements/wordpress
-      args:
-        - CONTAINER_NAME=${WP_CONTAINER_NAME:-wp}
-    image: wordpress
-    container_name: ${WP_CONTAINER_NAME:-wp}
-    restart: unless-stopped
-    volumes:
-      - wordpress:/var/www/html
-    networks:
-      - lemp-network
-    depends_on:
-      - mariadb
-    environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-wordpress}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+  # wordpress:
+  #   depends_on:
+  #     - mariadb
+  #   build:
+  #     context: ./requirements/wordpress
+  #     args:
+  #       - CONTAINER_NAME=wp
+  #   image: wordpress
+  #   container_name: wp
+  #   restart: unless-stopped
+  #   volumes:
+  #     - wordpress:/var/www/html
+  #   networks:
+  #     - lemp-network
+
+  #   environment:
+  #     - WORDPRESS_DB_NAME=${DB_NAME}
+  #     - WORDPRESS_DB_USER=${DB_USER}
+  #     - WORDPRESS_DB_PASSWORD=${DB_PASSWORD}
+  #     - WORDPRESS_DB_HOST=db:3306
+  #     - WORDPRESS_TABLE_PREFIX=wp_
 
   mariadb:
     build:
       context: ./requirements/mariadb
+      args:
+        - DB_FOLDER=/var/lib/mariadb
+        - DB_NAME=${DB_NAME}
+        - DB_USER=${DB_USER}
+        - DB_PASSWORD=${DB_PASSWORD}
     image: mariadb
-    container_name: ${MARIADB_CONTAINER_NAME:-mariadb}
+    container_name: db
     restart: unless-stopped
-
     volumes:
-      - db:/var/lib/mysql
+      - mariadb:/var/lib/mariadb
     networks:
       - lemp-network
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+    environment:
+      - DIR_DATA=/var/lib/mysql
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wpuser
+      - MYSQL_PASSWORD=secure_password
 
 volumes:
-  wordpress:
-  db:
+  # wordpress:
+  mariadb:
+
 
 networks:
   lemp-network:
