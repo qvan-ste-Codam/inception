@@ -1,10 +1,12 @@
 #!/bin/ash
 
-if [ ! -f "$DIR_DATA/ibdata1" ]; then
-    mariadb-install-db --datadir=${DIR_DATA} &
+if [ ! -f "${DB_DIR}/ibdata1" ]; then
+    mkdir -p run/mariadb 
+    chown mysql:mysql /run/mariadb ${DB_DIR}
+    mariadb-install-db --user=mysql --datadir=${DB_DIR} &
     wait $!
     
-    mariadbd --datadir=${DIR_DATA} --skip-networking  &
+    mariadbd --datadir=${DB_DIR} --skip-networking  &
     
     until mariadb-admin ping 2>/dev/null; do
         sleep 1
@@ -23,4 +25,4 @@ EOF
     wait $!
 fi
 
-exec /usr/bin/mariadbd-safe --datadir=${DIR_DATA}
+exec /usr/bin/mariadbd-safe --user=mysql --datadir=${DB_DIR}

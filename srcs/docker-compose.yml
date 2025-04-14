@@ -42,7 +42,7 @@ services:
     container_name: db
     restart: unless-stopped
     volumes:
-      - mariadb:/var/lib/mariadb
+      - mariadb:${DB_DIR}
     networks:
       - lemp-network
     ports:
@@ -50,7 +50,7 @@ services:
     expose:
       - 3306
     environment:
-      - DIR_DATA=/var/lib/mariadb
+      - DB_DIR=${DB_DIR}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
@@ -58,6 +58,7 @@ services:
 volumes:
   wordpress:
   mariadb:
+
 
 networks:
   lemp-network:
