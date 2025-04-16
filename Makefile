@@ -16,9 +16,9 @@ build:
 	docker compose -f $(DOCKER_COMPOSE_FILE) -p $(NAME) build --no-cache
 
 clean:
-	docker compose -f $(DOCKER_COMPOSE_FILE) down --remove-orphans
-	docker system prune -a -f
-	docker volume prune -a -f
+	docker compose -f $(DOCKER_COMPOSE_FILE) down --volumes --remove-orphans
+	docker image prune -f --filter "label=com.docker.compose.project=$(NAME)"
+	docker run --rm -v $(DATA_DIR):/data alpine sh -c "rm -rf /data/*"
 	rm -rf $(DATA_DIR)
 
 re: clean build all

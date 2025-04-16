@@ -45,13 +45,13 @@ services:
     container_name: db
     restart: unless-stopped
     volumes:
-      - mariadb:${DB_DIR}
+      - mariadb:/var/lib/mariadb
     networks:
       - lemp-network
     expose:
       - 3306
     environment:
-      - DB_DIR=${DB_DIR}
+      - DB_DIR=/var/lib/mariadb
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
