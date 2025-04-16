@@ -2,14 +2,15 @@ services:
   nginx:
     depends_on:
       - wordpress
-    build: requirements/nginx
+    build:
+      context: requirements/nginx
     image: nginx
     container_name: nginx
     restart: unless-stopped
     ports:
-      - "1024:80"
+      - "1024:443"
     volumes:
-      - wordpress:/var/www/html
+      - web:/var/www/
     networks:
       - lemp-network
 
@@ -18,13 +19,11 @@ services:
       - mariadb
     build:
       context: ./requirements/wordpress
-      args:
-        - CONTAINER_NAME=wp
     image: wordpress
     container_name: wp
     restart: unless-stopped
     volumes:
-      - wordpress:/var/www/html
+      - web:/var/www/
     networks:
       - lemp-network
     environment:
@@ -49,8 +48,6 @@ services:
       - mariadb:${DB_DIR}
     networks:
       - lemp-network
-    ports:
-      - "3306:3306"
     expose:
       - 3306
     environment:
@@ -60,10 +57,10 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
 
 volumes:
-  wordpress:
+  web:
     driver_opts:
       type: none
-      device: ${HOME}/data/html
+      device: ${HOME}/data/www
       o: bind
   mariadb:
     driver_opts:

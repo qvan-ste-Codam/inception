@@ -12,7 +12,7 @@ run:
 	docker compose -f $(DOCKER_COMPOSE_FILE) -p $(NAME) up
 
 build:
-	mkdir -p $(DATA_DIR)/html $(DATA_DIR)/db
+	mkdir -p $(DATA_DIR)/www $(DATA_DIR)/db
 	docker compose -f $(DOCKER_COMPOSE_FILE) -p $(NAME) build --no-cache
 
 clean:

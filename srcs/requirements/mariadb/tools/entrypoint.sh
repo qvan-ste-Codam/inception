@@ -1,5 +1,4 @@
 #!/bin/ash
-
 set -e
 
 if [ ! -f "${DB_DIR}/ibdata1" ]; then
@@ -10,7 +9,14 @@ if [ ! -f "${DB_DIR}/ibdata1" ]; then
     
     mariadbd --datadir=${DB_DIR} --skip-networking  &
     
+    retry_count=0
+    max_retries=30
     until mariadb-admin ping 2>/dev/null; do
+        retry_count=$((retry_count+1))
+        if [ $retry_count -ge $max_retries ]; then
+            echo "ERROR: MariaDB failed to start after $max_retries attempts"
+            exit 1
+        fi
         sleep 2
     done
 

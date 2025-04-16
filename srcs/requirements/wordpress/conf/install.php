@@ -40,7 +40,7 @@ if (!$isInstalled) {
         getenv('WP_ADMIN_EMAIL'),
         true,
         user_password: getenv('WP_ADMIN_PASSWORD'),
-        language: "en_US"
+        language: WPLANG
     );
     wp_create_user(
         getenv('WP_USER'),
