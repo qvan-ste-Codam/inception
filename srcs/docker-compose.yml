@@ -31,10 +31,12 @@ services:
     environment:
       - WP_DB_NAME=${DB_NAME}
       - WP_DB_USER=${DB_USER}
-      - WP_DB_PASSWORD=${DB_PASSWORD}
-      - WP_DB_HOST=db
+      - WP_DB_HOST=${DB_HOST}
+      - WP_CREDENTIALS_FILE=/run/secrets/wp_credentials
+      - DB_PASSWORD_FILE=/run/secrets/db_password
       - DOMAIN=${DOMAIN}
     secrets:
+      - db_password
       - wp_credentials
 
   mariadb:
@@ -44,16 +46,18 @@ services:
     container_name: db
     restart: unless-stopped
     volumes:
-      - mariadb:/var/lib/mariadb
+      - mariadb:/var/lib/mariadb/
     networks:
       - lemp-network
     expose:
       - 3306
     environment:
-      - DB_DIR=/var/lib/mariadb
+      - DB_DIR=/var/lib/mariadb/
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PASSWORD_FILE=/run/secrets/db_password
+    secrets:
+      - db_password
 
 volumes:
   web:
@@ -72,5 +76,7 @@ networks:
     driver: bridge
 
 secrets:
+  db_password:
+    file: ../secrets/db_password.txt
   wp_credentials:
-    file: ../secrets/wp_credentials.txt
+    file: ../secrets/wp_credentials.json

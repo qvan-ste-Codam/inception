@@ -26,8 +26,14 @@ define('DB_NAME', getenv('WP_DB_NAME'));
 /** Database username */
 define('DB_USER', getenv('WP_DB_USER'));
 
+$dbPasswordFile = getenv("DB_PASSWORD_FILE");
+if ($dbPasswordFile === null) {
+	fwrite(STDERR, "Error: db password file variable not set\n");
+	exit(1);
+}
+
 /** Database password */
-define('DB_PASSWORD', getenv('WP_DB_PASSWORD'));
+define('DB_PASSWORD', file_get_contents($dbPasswordFile));
 
 /** Database hostname */
 define('DB_HOST', getenv('WP_DB_HOST'));

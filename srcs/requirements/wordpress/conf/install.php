@@ -34,18 +34,31 @@ try {
 }
 
 if (!$isInstalled) {
+    $credentialsFile = getenv("WP_CREDENTIALS_FILE");
+    if (!file_exists($credentialsFile)) {
+        fwrite(STDERR, "Error: Credentials file not found at {$credentialsFile}\n");
+        exit(1);
+    }
+    $credentials = file_get_contents($credentialsFile);
+    if ($credentials === false) {
+        fwrite(STDERR, "Error: Unable to read credentials file\n");
+        exit(1);
+    }
+
+    $parsedCredentials = json_decode($credentials, true);
+
     wp_install(
         SITE_NAME,
-        getenv('WP_ADMIN'),
-        getenv('WP_ADMIN_EMAIL'),
+        $parsedCredentials['ADMIN']['USERNAME'],
+        $parsedCredentials['ADMIN']['EMAIL'],
         true,
-        user_password: getenv('WP_ADMIN_PASSWORD'),
+        user_password: $parsedCredentials['ADMIN']['PASSWORD'],
         language: WPLANG
     );
     wp_create_user(
-        getenv('WP_USER'),
-        getenv('WP_USER_PASSWORD'),
-        getenv('WP_USER_EMAIL')
+        $parsedCredentials['USER']['USERNAME'],
+        $parsedCredentials['USER']['PASSWORD'],
+        $parsedCredentials['USER']['EMAIL'],
     );
 }
 

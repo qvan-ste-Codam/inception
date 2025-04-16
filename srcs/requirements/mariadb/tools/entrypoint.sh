@@ -22,7 +22,7 @@ if [ ! -f "${DB_DIR}/ibdata1" ]; then
 
     mariadb <<-EOF
         CREATE DATABASE IF NOT EXISTS ${DB_NAME};
-        CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+        CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '$(cat $DB_PASSWORD_FILE)';
         GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
         DELETE FROM mysql.user WHERE User='';
         DROP DATABASE IF EXISTS test;
