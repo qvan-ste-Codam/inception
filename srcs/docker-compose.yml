@@ -33,13 +33,9 @@ services:
       - WP_DB_USER=${DB_USER}
       - WP_DB_PASSWORD=${DB_PASSWORD}
       - WP_DB_HOST=db
-      - WP_ADMIN=${WP_ADMIN}
-      - WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}
-      - WP_ADMIN_PASSWORD=${WP_ADMIN_PASSWORD}
-      - WP_USER=${WP_USER}
-      - WP_USER_PASSWORD=${WP_USER_PASSWORD}
-      - WP_USER_EMAIL=${WP_USER_EMAIL}
       - DOMAIN=${DOMAIN}
+    secrets:
+      - wp_credentials
 
   mariadb:
     build:
@@ -74,3 +70,7 @@ volumes:
 networks:
   lemp-network:
     driver: bridge
+
+secrets:
+  wp_credentials:
+    file: ../secrets/wp_credentials.txt
