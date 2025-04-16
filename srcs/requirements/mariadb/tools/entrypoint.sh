@@ -1,5 +1,7 @@
 #!/bin/ash
 
+set -e
+
 if [ ! -f "${DB_DIR}/ibdata1" ]; then
     mkdir -p run/mariadb 
     chown mysql:mysql /run/mariadb ${DB_DIR}
@@ -9,7 +11,7 @@ if [ ! -f "${DB_DIR}/ibdata1" ]; then
     mariadbd --datadir=${DB_DIR} --skip-networking  &
     
     until mariadb-admin ping 2>/dev/null; do
-        sleep 1
+        sleep 2
     done
 
     mariadb <<-EOF
@@ -25,4 +27,4 @@ EOF
     wait $!
 fi
 
-exec /usr/bin/mariadbd-safe --user=mysql --datadir=${DB_DIR}
+exec mariadbd-safe --user=mysql --datadir=${DB_DIR}
