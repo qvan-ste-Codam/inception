@@ -84,8 +84,8 @@ define('WP_DEBUG', false);
 
 /* Add any custom values between this line and the "stop editing" line. */
 
-define('WP_HOME', 'http://localhost:1024');
-define('WP_SITEURL', 'http://localhost:1024');
+define('WP_SITEURL', 'https://' . getenv('DOMAIN'));
+define('WP_HOME', 'https://' . getenv('DOMAIN'));
 define('WPLANG', 'en_US');
 
 /* That's all, stop editing! Happy publishing. */

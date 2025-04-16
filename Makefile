@@ -21,6 +21,20 @@ clean:
 	docker run --rm -v $(DATA_DIR):/data alpine sh -c "rm -rf /data/*"
 	rm -rf $(DATA_DIR)
 
-re: clean build all
+nuke:
+	docker stop $(shell docker ps -aq) 2>/dev/null || true
+	docker rm $(shell docker ps -aq) 2>/dev/null || true
+	docker compose -f $(DOCKER_COMPOSE_FILE) down --volumes --remove-orphans --rmi all
+	for vol in $$(docker volume ls -q); do \
+		docker volume rm -f $$vol; \
+	done
+	docker system prune -af --volumes
+	docker volume prune -f
+	docker network prune -f
+	docker image prune -af
+	docker run --rm -v $(DATA_DIR):/data alpine sh -c "rm -rf /data/*"
+	rm -rf $(DATA_DIR)
 
-.PHONY: all build clean re run
+re: clean build run
+
+.PHONY: all build clean re run nuke

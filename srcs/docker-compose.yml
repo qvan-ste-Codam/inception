@@ -8,11 +8,13 @@ services:
     container_name: nginx
     restart: unless-stopped
     ports:
-      - "1024:443"
+      - "443:443"
     volumes:
       - web:/var/www/
     networks:
       - lemp-network
+    environment:
+      - DOMAIN=${DOMAIN}
 
   wordpress:
     depends_on:
@@ -37,6 +39,7 @@ services:
       - WP_USER=${WP_USER}
       - WP_USER_PASSWORD=${WP_USER_PASSWORD}
       - WP_USER_EMAIL=${WP_USER_EMAIL}
+      - DOMAIN=${DOMAIN}
 
   mariadb:
     build:
