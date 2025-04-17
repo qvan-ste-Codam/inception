@@ -20,6 +20,9 @@ COPY conf/www.conf /etc/php83/php-fpm.d/www.conf
 COPY conf/wp-config.php /var/www/html/wp-config.php
 COPY conf/install.php /var/www/html/install.php
 
+# The VM gives a permission denied if I don't set this explicately
+RUN chmod +r /var/www/html/wp-config.php /var/www/html/install.php
+
 # Generate salts
 RUN wget -O - https://api.wordpress.org/secret-key/1.1/salt/ > /tmp/wp-keys && \
     sed -i "/\/\/ AUTH KEY PLACEHOLDER/r /tmp/wp-keys" /var/www/html/wp-config.php && \

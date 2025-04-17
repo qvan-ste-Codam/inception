@@ -35,12 +35,12 @@ try {
 
 if (!$isInstalled) {
     $credentialsFile = getenv("WP_CREDENTIALS_FILE");
-    if (!file_exists($credentialsFile)) {
-        fwrite(STDERR, "Error: Credentials file not found at {$credentialsFile}\n");
+    if (!$credentialsFile || !file_exists($credentialsFile)) {
+        fwrite(STDERR, "Error: Credentials file not found\n");
         exit(1);
     }
     $credentials = file_get_contents($credentialsFile);
-    if ($credentials === false) {
+    if (!$credentials) {
         fwrite(STDERR, "Error: Unable to read credentials file\n");
         exit(1);
     }

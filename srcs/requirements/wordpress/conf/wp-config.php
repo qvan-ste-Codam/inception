@@ -26,14 +26,8 @@ define('DB_NAME', getenv('WP_DB_NAME'));
 /** Database username */
 define('DB_USER', getenv('WP_DB_USER'));
 
-$dbPasswordFile = getenv("DB_PASSWORD_FILE");
-if ($dbPasswordFile === null) {
-	fwrite(STDERR, "Error: db password file variable not set\n");
-	exit(1);
-}
-
 /** Database password */
-define('DB_PASSWORD', file_get_contents($dbPasswordFile));
+define('DB_PASSWORD', getenv("DB_PASSWORD"));
 
 /** Database hostname */
 define('DB_HOST', getenv('WP_DB_HOST'));
@@ -86,7 +80,7 @@ $table_prefix = 'wp_';
  *
  * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
-define('WP_DEBUG', false);
+define('WP_DEBUG', true);
 
 /* Add any custom values between this line and the "stop editing" line. */
 
